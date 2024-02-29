@@ -1,0 +1,442 @@
+<!--*************************||  Boleto de Táxi - VersÃ£o 2 ||*****************************
+Gestor do Processo: FABÃ�OLA SENNA PENHA
+Unidade Gestora: USN
+Gerente da unidade: LUANA DINIZ DA SILVA MONTEIRO
+Diretor da Ã�rea:  ANANDA DA SILVA CARVALHO
+
+Equipe de Desenvolvimento:
+Main Developer: ROBEMAR MORAIS DUARTE JUNIOR
+Developer Support: PAULO VINÃ�CIUS BONATES LIRA 
+Project Manager: DANIEL DE AZEVEDO CASAS 
+**************************||  Powered by ATIC - SEBRAE/AM ||*************************-->
+
+<html>
+
+<head>
+	<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css" />
+	<link type="text/css" rel="stylesheet" href="SEBRAE.css" />
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="custom.js"></script>
+	<script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+	<script type="text/javascript" src="slc_dotacao.js"></script>
+	<!-- <script type="text/javascript" src="projeto.js"></script>
+		<script type="text/javascript" src="acao.js"></script>
+		<script type="text/javascript" src="unidade.js"></script> -->
+
+	<link rel="stylesheet" type="text/css" href="/style-guide/css/fluig-style-guide-filter.min.css">
+	<script src="/style-guide/js/fluig-style-guide-filter.min.js"></script>
+	<meta charset="utf-8">
+</head>
+
+<body>
+	<div class="fluig-style-guide">
+		<form name="form" role="form">
+
+
+			<!-- Hidden Superior -->
+			<input type="hidden" name="valorTotal_din_ins" id="valorTotal_din_ins">
+			<input type="hidden" name="valorTotal_din_con" id="valorTotal_din_con">
+			<input type="hidden" name="hd_numSuperior" id="numSuperior">
+			<input type="hidden" name="hd_numSuperior_super" id="hd_numSuperior_super">
+			<input type="hidden" name="hd_Super" id="hd_Super">
+			<input type="hidden" name="hd_Unidade_super" id="hd_Unidade_super">
+			<input type="hidden" name="hd_CustoTotalFinal" id="hd_CustoTotalFinal">
+			<input type="hidden" name="valor_subarea" id="valor_subarea">
+			<input type="hidden" name="hd_nome" id="hd_nome">
+			<input type="hidden" name="hd_x" id="hd_x">
+			<input type="hidden" name="hd_y" id="hd_y">
+			<input type="hidden" name="hd_TotalInstrutoria" id="hd_TotalInstrutoria">
+			<input type="hidden" name="hd_TotalConsultoria" id="hd_TotalConsultoria">
+
+			<!-- Hidden Dotação Orçamentária -->
+			<input type="hidden" name="codProjeto" id="codProjeto">
+			<input type="hidden" name="codAcao" id="codAcao">
+			<input type="hidden" name="codRecurso" id="codRecurso">
+
+
+			<!-- Abertura do Panel -->
+			<div class="panel-top">
+				<div class="panel-h">
+					<h1> <i class="fluigicon fluigicon-system-tools icon-xl"></i>Solicitação de Serviços - USO/UMP</h1>
+				</div>
+			</div>
+
+			<!-- Dados do Solicitante -->
+			<div class="panel-internal" id="panel_solicitante">
+				<div class="panel-h">
+					<h3 class="panel-title">
+						<b>Dados do Solicitante</b>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group row">
+
+						<div class="col-md-3">
+							<label for="dt_DataSolicita">Data:</label>
+							<input type="text" class="form-control" name="dt_DataSolicita" id="dt_DataSolicita"
+								readonly>
+						</div>
+
+						<div class="col-md-3" id="Numero_Process_Atual">
+							<label for="txt_NumProcess">Código da Solicitação:</label>
+							<input type="text" class="form-control" name="txt_NumProcess" id="txt_NumProcess" readonly>
+						</div>
+
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label for="cmb_NomeSolicita">Nome Solicitante:</label>
+							<select name="cmb_NomeSolicita" id="cmb_NomeSolicita" dataset="colleague"
+								datasetkey="colleagueId" datasetvalue="colleagueName" class="form-control"
+								readonly></select>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+			<!-- Final - Dados do Solicitante -->
+
+
+			<!-------------------------------------------------------Abertura Painel com Dados da Solicitação------------------------------------------------------>
+
+
+			<div class="panel-internal" id="Panel_Servico">
+				<div class="panel-h">
+					<h3 class="panel-title">
+						<b>Descrição dos Serviços</b>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="txt_TipoServ">Tipo de Serviço<span><strong>*</strong></span>:</label>
+								<select name="txt_TipoServ" id="txt_TipoServ" dataset="ds_ServCatUSN"
+									datasetkey="Categoria" datasetvalue="Categoria" class="form-control"
+									onblur="FinalValue()"></select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="txt_Servico">Serviço<span><strong>*</strong></span>:</label>
+								<div id="ds_ServCatUSN"></div>
+								<input type="text" class="form-control" name="valorSelecionado" id="valorSelecionado"
+									readonly>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row" id="gerencia">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="cmb_GerenteSolicitante">Superior para Aprovação:</label>
+								<!--<input type="text" class="form-control" name="cmb_GerenteSolicitante" id="cmb_GerenteSolicitante">
+						-->
+								<select name="cmb_GerenteSolicitante" id="cmb_GerenteSolicitante" dataset="dsc_Unidades"
+									datasetkey="Matricula" datasetvalue="NomeGerente" class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<label for="zm_UnidadeSolicitante">Unidade Solicitante:</label>
+								<input type="text" class="form-control" name="zm_UnidadeSolicitante"
+									id="zm_UnidadeSolicitante">
+							</div>
+						</div>
+					</div>
+
+
+					<div class="form-group row">
+						<div class="col-md-12">
+
+							<label for="ta_descricao">Descrição da Solicitação:</label>
+							<textarea name="ta_descricao" rows="4" id="ta_descricao" class="form-control"
+								value=""></textarea>
+
+						</div>
+					</div>
+
+
+
+
+
+
+
+				</div>
+
+			</div>
+
+			<!-- Final - Dados da Solicitação -->
+
+
+
+
+			<!-------------------------------------------------------Abertura Painel com Dados Atendimento USN------------------------------------------------------>
+
+
+			<div class="panel-internal" id="Panel_AtendUSN">
+				<div class="panel-h">
+					<h3 class="panel-title">
+						<b>Atendimento USN</b>
+					</h3>
+				</div>
+				<div class="panel-body">
+
+					<div class="form-group row">
+						<div class="col-md-6">
+							<label for="cmb_Atendente">Atendente:</label>
+							<select name="cmb_Atendente" id="cmb_Atendente" dataset="colleague" datasetkey="colleagueId"
+								datasetvalue="colleagueName" class="form-control" readonly></select>
+						</div>
+
+						<div class="col-md-6">
+							<label for="dt_DataAtende">Data do Atendimento:</label>
+							<input type="text" class="form-control" name="dt_DataAtende" id="dt_DataAtende" readonly>
+						</div>
+
+					</div>
+
+
+
+					<div class="form-group row">
+						<div class="col-md-12">
+
+							<label for="ta_atendUSN">Descrição do Atendimento USN:</label>
+							<textarea name="ta_atendUSN" rows="6" id="ta_atendUSN" class="form-control"
+								value=""></textarea>
+
+						</div>
+					</div>
+
+
+
+				</div>
+
+			</div>
+
+			<!-- Final - Dados da Solicitação -->
+
+
+
+
+			<!-- Dados de Dotação Orçamentária  -->
+
+			<div class="panel-money" id="painel_dadosrateio">
+				<div class="panel-h">
+					<h3 class="panel-title">
+						<b>Dotação Orçamentária</b>
+					</h3>
+				</div>
+
+
+				<div class="panel-body">
+					<div class="col-md-9">
+						<div class="form-group">
+							<div style="display: none;">
+								<label for="txt_projeto">Projeto<span><strong></strong></span>:</label>
+								<input type="zoom" class="form-control" id="txt_projeto" name="txt_projeto" data-zoom="{
+								'displayKey':'NOME',
+								'datasetId':'dsprojeto',
+								'maximumSelectionLength':'1',
+								'placeholder':'Escolha o projeto',
+								'fields':[
+								{
+									'field':'CODCCUSTO',
+									'label':'CODIGO'
+								},{
+										'field':'NOME',
+										'label':'NOME',
+										'standard':'true'
+								}
+								]
+								}">
+							</div>
+							<div id="projetov" style="display: d;"></div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							<label for="txt_saldo">Saldo:</label>
+							<input class="form-control mm" type="text" name="txt_saldo" id="txt_saldo" readonly>
+						</div>
+					</div>
+					<br>
+					<div class="col-md-9">
+						<div class="form-group">
+							<div style="display: none;">
+								<label for="txt_acao">Ação<span><strong></strong></span>:</label>
+								<input type="zoom" class="form-control" id="txt_acao" name="txt_acao" data-zoom="{
+								'displayKey':'NOME',
+								'datasetId':'dsacao',
+								'maximumSelectionLength':'1',
+								'placeholder':'Escolha a ação',
+								'fields':[
+								{
+									'field':'CODCCUSTO',
+									'label':'CODIGO',
+									'search':'true'
+									
+								},{
+										'field':'NOME',
+										'label':'NOME',
+										'search':'true',
+										'standard':'true'
+								}
+								]
+								}" onblur="verifc()">
+							</div>
+							<div id="acaov" style="display: d;"></div>
+						</div>
+					</div>
+					<br>
+					<div class="col-md-9">
+						<div class="form-group">
+							<div id="unin" style="display: none;">
+								<label for="txt_recursos">Unidade<span><strong></strong></span>:</label>
+								<input type="zoom" class="form-control" id="txt_recursos" name="txt_recursos" data-zoom="{
+								'displayKey':'NOME',
+								'datasetId':'dsunidade',
+								'maximumSelectionLength':'1',
+								'placeholder':'Escolha a unidade',
+								'fields':[
+								{
+									'field':'CODCCUSTO',
+									'label':'CODIGO'
+								},{
+										'field':'NOME',
+										'label':'NOME',
+										'standard':'true'
+								}
+								]
+								}">
+							</div>
+							<div id="unidadev" style="display: d;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Final - Dados de Dotação Orçamentária  -->
+			<!--------------------------------------------------Fechamento Painel Dotação Orçamentária----------------------------------------------->
+
+
+			<!-------------------------------------------------------Abertura Painel com Dados da Solicitação------------------------------------------------------>
+
+
+			<div class="panel-internal" id="Panel_Avaliacao">
+				<div class="panel-h">
+					<h3 class="panel-title">
+						<b>Avaliação do Serviço</b>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="slc_Avalia">Classifique o Atendimento </label>
+								<select class="form-control" name="slc_Avalia" id="slc_Avalia">
+									<option value="">Selecione</option>
+									<option value="Satisfeito ">Satisfeito </option>
+									<option value="Parcialmente Satisfeito">Parcialmente Satisfeito</option>
+									<option value="Insatisfeito ">Insatisfeito</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="txt_Comentario">Comentário:</label>
+								<textarea class="form-control" rows="4" name="txt_Comentario"
+									id="txt_Comentario"></textarea>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="form-group row">
+						<div class="col-md-12">
+
+
+
+						</div>
+					</div>
+
+
+
+
+
+				</div>
+
+			</div>
+
+			<!-- Final - Dados da Solicitação -->
+
+
+
+
+
+
+
+			<div class="panel panel-default" id="panel_rodape">
+				<div class="panel-heading ">
+					<h4 class="panel-title">Desenvolvido por NTIC SEBRAE/AM</h4>
+				</div>
+			</div>
+
+			<!-----------------------------------------------------------------JavaScript------------------------------------------------------------------->
+
+			<script type="text/javascript">
+
+				function filtroDataset() {
+					var select = "<select class=\"form-control\" name=\"ds_ServUSNz\" id=\"ds_ServUSNz\" onclick=\"FinalValue()\"";
+					select += "\>"
+					var dataset = DatasetFactory.getDataset("ds_ServUSN", null, null, null);
+					var datasett = DatasetFactory.getDataset("ds_ServCatUSN", null, null, null);
+					var myElement = document.getElementById("txt_TipoServ").value;
+
+					for (j = 0; j < datasett.values.length; j++) {
+						var row = datasett.values[j];
+						var linha = row[datasett.columns[1]];
+						if (linha == myElement) {
+							var num = row[datasett.columns[0]];
+							for (j = 0; j < dataset.values.length; j++) {
+								var row = dataset.values[j];
+								var linha = row[dataset.columns[1]];
+								if (num == linha) {
+									select += "<option value=\"" + row[dataset.columns[2]] + "\">" + row[dataset.columns[2]] + "</option>";
+								}
+							}
+						}
+					}
+
+					select += "</select>";
+					return select;
+
+				}
+				var x = filtroDataset();
+				document.getElementById("ds_ServCatUSN").innerHTML = x;
+
+
+				function FinalValue() {
+					document.getElementById("valorSelecionado").value = document.getElementById("ds_ServUSNz").value
+				}
+
+				document.getElementById("txt_TipoServ").onclick = function InsereDataset() {
+					var x = filtroDataset();
+					document.getElementById("ds_ServCatUSN").innerHTML = x;
+				}
+
+			</script>
+		</form>
+	</div>
+</body>
+
+</html>
